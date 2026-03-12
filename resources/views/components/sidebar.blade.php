@@ -27,14 +27,16 @@
     <div class="sidebar-wrapper scrollbar scrollbar-inner">
       <div class="sidebar-content">
         <ul class="nav nav-secondary">
-          <li class="nav-item active">
+          @foreach ($links as $link)
+          @if ($link['is_dropdown'])
+          <li class="nav-item {{ $link['is_active'] ? 'active' : '' }}">
             <a
               data-bs-toggle="collapse"
               href="#dashboard"
               class="collapsed"
               aria-expanded="false"
             >
-              <i class="fas fa-home"></i>
+              <i class="{{ $link['icon'] }}"></i>
               <p>Dashboard</p>
               <span class="caret"></span>
             </a>
@@ -48,13 +50,25 @@
               </ul>
             </div>
           </li>
-          <li class="nav-section">
+          @else
+
+          <li class="nav-item {{ $link['is_active'] ? 'active' : '' }}">
+            <a href="{{ route($link['route']) }}">
+              <i class="{{ $link['icon'] }}"></i>
+              <p>{{ $link['label'] }}</p>
+              {{-- <span class="badge badge-success">4</span> --}}
+            </a>
+          </li>
+          @endif
+
+          @endforeach
+          {{-- <li class="nav-section">
             <span class="sidebar-mini-icon">
               <i class="fa fa-ellipsis-h"></i>
             </span>
             <h4 class="text-section">Components</h4>
-          </li>
-          <li class="nav-item">
+          </li> --}}
+          {{-- <li class="nav-item">
             <a data-bs-toggle="collapse" href="#base">
               <i class="fas fa-layer-group"></i>
               <p>Base</p>
@@ -109,7 +123,8 @@
                 </li>
               </ul>
             </div>
-          </li>
+          </li> --}}
+
         </ul>
       </div>
     </div>
