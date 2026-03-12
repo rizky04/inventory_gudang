@@ -21,6 +21,9 @@ class Sidebar extends Component
                 'is_active' => request()->routeIs('home'),
                 'icon' => 'fas fa-chart-line',
                 'is_dropdown' => false,
+            ],
+            [
+                ''
             ]
             ];
     }
