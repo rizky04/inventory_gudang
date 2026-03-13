@@ -4,7 +4,7 @@
       <div class="logo-header" data-background-color="light">
         <a href="index.html" class="logo">
           <img
-            src="assets/img/kaiadmin/logo_light.svg"
+            src="{{ asset('assets/img/kaiadmin/logo_light.svg') }}"
             alt="navbar brand"
             class="navbar-brand"
             height="20"
@@ -37,15 +37,17 @@
               aria-expanded="false"
             >
               <i class="{{ $link['icon'] }}"></i>
-              <p>Dashboard</p>
+              <p>{{ $link['label'] }}</p>
               <span class="caret"></span>
             </a>
             <div class="collapse" id="dashboard">
               <ul class="nav nav-collapse">
                 <li>
-                  <a href="../demo1/index.html">
-                    <span class="sub-item">Dashboard 1</span>
-                  </a>
+                    @foreach ($link['items'] as $item)
+                    <a href="{{ route($item['route']) }}">
+                        <span class="sub-item">{{ $item['label'] }}</span>
+                      </a>
+                    @endforeach
                 </li>
               </ul>
             </div>

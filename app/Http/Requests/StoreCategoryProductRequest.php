@@ -11,7 +11,7 @@ class StoreCategoryProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class StoreCategoryProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+           'name_category' => 'required|unique:category_products,name_category'
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => 'Name Category is required',
+            'unique' => 'Name Category is avalaible'
         ];
     }
 }

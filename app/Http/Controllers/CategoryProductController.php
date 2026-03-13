@@ -11,9 +11,14 @@ class CategoryProductController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public $pageTitle = 'Category Product';
     public function index()
     {
-        //
+        $pageTitle = $this->pageTitle;
+        $query = CategoryProduct::query();
+        $category = $query->paginate(10);
+        return view('category-product.index', compact('pageTitle', 'category'));
     }
 
     /**
@@ -22,6 +27,7 @@ class CategoryProductController extends Controller
     public function create()
     {
         //
+        return view('category-product.create');
     }
 
     /**
@@ -29,7 +35,11 @@ class CategoryProductController extends Controller
      */
     public function store(StoreCategoryProductRequest $request)
     {
-        //
+        CategoryProduct::create([
+            'name_category' => $request->name_category
+        ]);
+        toast()->success('Category Product Success created');
+        return redirect()->route('master-data.category-product.index');
     }
 
     /**
@@ -53,7 +63,11 @@ class CategoryProductController extends Controller
      */
     public function update(UpdateCategoryProductRequest $request, CategoryProduct $categoryProduct)
     {
-        //
+       $categoryProduct->name_category = $request->name_category;
+       $categoryProduct->save();
+       toast()->success('Category Product Success Updated');
+       return redirect()->route('master-data.category-product.index');
+
     }
 
     /**

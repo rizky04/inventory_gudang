@@ -11,7 +11,7 @@ class UpdateCategoryProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,15 @@ class UpdateCategoryProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+             'name_category' => 'required|unique:category_products,name_category,' . $this->category_product->id,
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'required' => 'Category name required',
+            'unique' => 'Category name avalaible'
         ];
     }
 }
