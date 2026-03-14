@@ -6,9 +6,9 @@
         <div>
             <x-category-product.form-category-product />
         </div>
-        <table class="table">
+        <table class="table table-striped mt-4">
             <thead>
-                <tr class="text-center">
+                <tr>
                     <th>#</th>
                     <th>Category Name</th>
                     <th>Opsi</th>
@@ -16,11 +16,14 @@
             </thead>
             <tbody>
                 @forelse ($category as $index => $item)
-                    <tr class="text-center">
+                    <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $item->name_category }}</td>
                         <td>
-                            <x-category-product.form-category-product id="{{ $item->id }}" />
+                           <div class="d-flex align-items-center gap-1">
+                             <x-category-product.form-category-product id="{{ $item->id }}" />
+                            <x-confirm-delete route="master-data.category-product.destroy" id="{{ $item->id }}" />
+                           </div>
                         </td>
                     </tr>
                 @empty

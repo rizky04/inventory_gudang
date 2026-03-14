@@ -18,6 +18,7 @@ class CategoryProductController extends Controller
         $pageTitle = $this->pageTitle;
         $query = CategoryProduct::query();
         $category = $query->paginate(10);
+        confirmDelete('Delete Category Product ?');
         return view('category-product.index', compact('pageTitle', 'category'));
     }
 
@@ -75,6 +76,8 @@ class CategoryProductController extends Controller
      */
     public function destroy(CategoryProduct $categoryProduct)
     {
-        //
+        $categoryProduct->delete();
+        toast()->success('Category Product Success Deleted');
+        return redirect()->route('master-data.category-product.index');
     }
 }

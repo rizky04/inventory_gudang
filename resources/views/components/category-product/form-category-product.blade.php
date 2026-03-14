@@ -24,14 +24,14 @@
           <div class="modal-body">
             <div class="form-group">
                 <label for="name_category">Category Name</label>
-                <input type="text" name="name_category" id="name_category" class="form-control" value="{{ old('name_category', $name_category ?? '') }}" required>
+                <input type="text" name="name_category" id="name_category" class="form-control @error('name_category') is-invalid @enderror" value="{{ old('name_category', $name_category ?? '') }}">
                 @error('name_category')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
             </div>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-white" data-bs-dismiss="modal">Cancel</button>
             <button type="submit" class="btn btn-primary">Save</button>
           </div>
        </form>
