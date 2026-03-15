@@ -3,9 +3,22 @@
 @section('content')
 <div class="card">
     <div class="card-body py-5">
-        <div>
+       <div class="row">
+        <div class="row col-10 align-items-center justify-content-between">
+            <div class="col-1">
+                <x-per-page-option />
+            </div>
+            <div class="col-9">
+                <x-filter-by-field term="search" placeholder="Search category product..." />
+            </div>
+            <div class="col-1">
+                <x-buttong-reset-filter route="master-data.category-product.index"/>
+            </div>
+        </div>
+         <div class="col-2 d-flex justify-content-end">
             <x-category-product.form-category-product />
         </div>
+       </div>
         <table class="table table-striped mt-4">
             <thead>
                 <tr>
@@ -33,6 +46,7 @@
                 @endforelse
             </tbody>
         </table>
+        {{ $category->links() }}
     </div>
 </div>
 @endsection

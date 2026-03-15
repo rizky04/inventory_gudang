@@ -16,8 +16,15 @@ class CategoryProductController extends Controller
     public function index()
     {
         $pageTitle = $this->pageTitle;
+        $perPage = request()->query('perPage') ?? 10;
+        $search = request()->query('search');
         $query = CategoryProduct::query();
-        $category = $query->paginate(10);
+
+        if($search){
+            $query->where('name_category', 'like', '%' . $search . '%');
+        }
+
+        $category = $query->paginate($perPage)->appends(request()->query());
         confirmDelete('Delete Category Product ?');
         return view('category-product.index', compact('pageTitle', 'category'));
     }
