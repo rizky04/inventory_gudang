@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryProductController;
+use App\Http\Controllers\ProductController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -16,5 +17,6 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware('auth')->group(function(){
     Route::prefix('master-data')->name('master-data.')->group(function(){
         Route::resource('category-product', CategoryProductController::class);
+        Route::resource('product', ProductController::class);
     });
 });

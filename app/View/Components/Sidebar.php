@@ -30,9 +30,13 @@ class Sidebar extends Component
                 'is_dropdown' => true,
                 'items' => [
                     [
-                           'label' => 'Kategori Produk',
-                    'route' => 'master-data.category-product.index'
+                        'label' => 'Category Product',
+                        'route' => 'master-data.category-product.index'
                     ],
+                    [
+                        'label' => 'Data Product',
+                        'route' => 'master-data.product.index'
+                    ]
                 ]
             ]
             ];
