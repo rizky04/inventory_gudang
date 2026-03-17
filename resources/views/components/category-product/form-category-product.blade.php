@@ -23,7 +23,7 @@
           </div>
           <div class="modal-body">
             <div class="form-group">
-                <label for="name_category">Category Name</label>
+                <label for="name_category" class="form-label">Category Name</label>
                 <input type="text" name="name_category" id="name_category" class="form-control @error('name_category') is-invalid @enderror" value="{{ old('name_category', $name_category ?? '') }}">
                 @error('name_category')
                     <div class="text-danger">{{ $message }}</div>

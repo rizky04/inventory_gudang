@@ -16,17 +16,19 @@ class ProductController extends Controller
     {
         //
         $pageTitle = $this->pageTitle;
-        $query = Product::query();
+        // $query = Product::query();
         $perPage = request()->query('perPage') ?? 10;
         $search = request()->query('search');
-        $query = Product::query();
+        $query = Product::query()->with('category');
+
 
         if($search){
             $query->where('name_product', 'like', '%' . $search . '%');
         }
         $product = $query->paginate($perPage)->appends(request()->query());
+        // dd($product);
         confirmDelete('Delete Product ?');
-        return view('', compact('pageTitle', 'product'));
+        return view('product.index', compact('pageTitle', 'product'));
     }
 
     /**
@@ -42,7 +44,13 @@ class ProductController extends Controller
      */
     public function store(StoreProductRequest $request)
     {
-        //
+        Product::create([
+            'name_product' => $request->name_product,
+            'description_product' => $request->description_product,
+            'category_product_id' => $request->category_product_id
+        ]);
+        toast()->success('Product success created');
+        return redirect()->route('master-data.product.index');
     }
 
     /**
@@ -50,7 +58,8 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        //
+        $pageTitle = $this->pageTitle;
+        return view('product.show', compact('product', 'pageTitle'));
     }
 
     /**
@@ -66,7 +75,12 @@ class ProductController extends Controller
      */
     public function update(UpdateProductRequest $request, Product $product)
     {
-        //
+        $product->name_product = $request->name_product;
+        $product->description_product = $request->description_product;
+        $product->category_product_id = $request->category_product_id;
+        $product->save();
+        toast()->success('Product success Updated');
+        return redirect()->route('master-data.product.index');
     }
 
     /**
@@ -74,6 +88,8 @@ class ProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        //
+       $product->delete();
+       toast()->success('Product Success Deleted');
+       return redirect()->route('master-data.product.index');
     }
 }
