@@ -12,7 +12,7 @@
         <x-meta-item label="Description" value="{{ $product->description_product }}" />
         <div class="mt-2">
             <div class="d-flex justify-content-end">
-                <button class="btn btn-primary">Create Varian</button>
+                <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#modalFormVarian">Create Varian</button>
             </div>
             <div class="row mt-2">
                 <div class="col-12">
@@ -24,4 +24,5 @@
         </div>
     </div>
 </div>
+<x-product.form-variant />
 @endsection
