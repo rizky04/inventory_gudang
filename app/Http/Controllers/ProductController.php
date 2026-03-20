@@ -58,6 +58,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+
         $pageTitle = $this->pageTitle;
         return view('product.show', compact('product', 'pageTitle'));
     }

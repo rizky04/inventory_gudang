@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\VarianProduct;
 use App\Http\Requests\StoreVarianProductRequest;
 use App\Http\Requests\UpdateVarianProductRequest;
+use Illuminate\Support\Facades\Storage;
 
 class VarianProductController extends Controller
 {
@@ -29,7 +30,19 @@ class VarianProductController extends Controller
      */
     public function store(StoreVarianProductRequest $request)
     {
-        //
+        $fileName = time() . '.' . $request->file('image_variant')->getClientOriginalExtension();
+        Storage::disk('public')->putFileAs('varian-product', $request->file('image_variant'), $fileName);
+
+        VarianProduct::create([
+            'product_id' => $request->product_id,
+            'number_sku' => VarianProduct::generateNumberSku(),
+            'name_variant' => $request->name_variant,
+            'image_variant' => $fileName,
+            'price_variant' => $request->price_variant,
+            'stok_variant' => $request->stok_variant,
+        ]);
+        // toast()->success('Product success created');
+        return response()->json(['message' => 'Data berhasil disimpan']);
     }
 
     /**

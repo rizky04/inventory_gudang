@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function(){
     Route::prefix('master-data')->name('master-data.')->group(function(){
         Route::resource('category-product', CategoryProductController::class);
         Route::resource('product', ProductController::class);
-        Route::resource('variant-product', VarianProductController::class)->only(['store','update','destroy']);
+        Route::resource('variant-product', VarianProductController::class);
     });
 });

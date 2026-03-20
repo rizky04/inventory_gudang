@@ -17,4 +17,16 @@ class VarianProduct extends Model
         'price_variant',
         'stok_variant',
     ];
+
+    public static function generateNumberSku(){
+        $maxId = self::max('id');
+        $prefix = "SKU";
+        $numberSku = $prefix . str_pad($maxId + 1, 6, '0', STR_PAD_LEFT);
+        return $numberSku;
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
+    }
 }

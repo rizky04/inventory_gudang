@@ -11,7 +11,7 @@ class StoreVarianProductRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,17 @@ class StoreVarianProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'product_id' => 'required|exists:products,id',
+            'name_variant' => 'required',
+            'stok_variant' => 'required|numeric',
+            'price_variant' => 'required|numeric',
+            'image_variant' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ];
     }
 }
+// 'product_id',
+//         'number_sku',
+//         'name_variant',
+//         'image_variant',
+//         'price_variant',
+//         'stok_variant',

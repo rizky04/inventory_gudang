@@ -17,7 +17,7 @@ class FormVariant extends Component
     {
         $this->product_id = request()->route('product')->id;
         if ($id) {
-            $variant = VarianProduct::findOrdFail($id);
+            $variant = VarianProduct::findOrFail($id);
             $this->id = $variant->id;
             $this->name_variant = $variant->name_variant;
             $this->price_variant = $variant->price_variant;

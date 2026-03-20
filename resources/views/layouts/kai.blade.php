@@ -8,6 +8,7 @@
       content="width=device-width, initial-scale=1.0, shrink-to-fit=no"
       name="viewport"
     />
+    <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link
       rel="icon"
       href="{{ asset('assets/img/kaiadmin/favicon.ico') }}"
@@ -217,5 +218,7 @@
     <script src="{{ asset('assets/js/plugin/sweetalert/sweetalert.min.js') }}"></script>
     <!-- Kaiadmin JS -->
     <script src="{{ asset('assets/js/kaiadmin.min.js') }}"></script>
+
+    @stack('script')
   </body>
 </html>

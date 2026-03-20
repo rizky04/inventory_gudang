@@ -18,4 +18,8 @@ class Product extends Model
     public function category(){
         return $this->belongsTo(CategoryProduct::class, 'category_product_id');
     }
+
+    public function varianProduct(){
+        return $this->hasMany(VarianProduct::class, 'product_id');
+    }
 }
