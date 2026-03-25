@@ -2,7 +2,7 @@
 
 namespace App\View\Components\product;
 
-use App\Models\VarianProduct;
+use App\Models\VariantProduct;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
@@ -17,7 +17,7 @@ class FormVariant extends Component
     {
         $this->product_id = request()->route('product')->id;
         if ($id) {
-            $variant = VarianProduct::findOrFail($id);
+            $variant = VariantProduct::findOrFail($id);
             $this->id = $variant->id;
             $this->name_variant = $variant->name_variant;
             $this->price_variant = $variant->price_variant;

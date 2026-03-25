@@ -16,7 +16,7 @@
                         data-bs-target="#modalFormVarian">Create Varian</button>
                 </div>
                 <div class="row mt-2">
-                    @forelse ($product->varianProduct as $item)
+                    @forelse ($product->variantProduct as $item)
                         <div class="col-4">
                             <x-product.card-variant :variant="$item" />
                         </div>
@@ -47,6 +47,26 @@
                         $('#modalFormVarianLabel .modal-title').text('Create Varian');
                         modal.show();
                     });
+
+                    $(".btnEditVarian").on('click', function() {
+                        let name_variant = $(this).data('name-variant');
+                        let price_variant = $(this).data('price-variant');
+                        let stok_variant = $(this).data('stok-variant');
+                        let action = $(this).data('action');
+
+                        $form[0].reset();
+                        $form.attr('action', action);
+                        $form.find('small.text-danger').text('');
+                        $form.append('<input type="hidden" name="_method" value="PUT">');
+                        $form.find('#name_variant').val(name_variant);
+                        $form.find('#price_variant').val(price_variant);
+                        $form.find('#stok_variant').val(stok_variant);
+                        $('#modalFormVarianLabel .modal-title').text('Edit Varian');
+                        modal.show();
+
+                    });
+
+
 
                     $form.submit(function(e) {
                         e.preventDefault();
@@ -81,6 +101,22 @@
                             }
                         });
                     });
+
+                        $('.formDeleteVariant').submit(function(e) {
+                            e.preventDefault();
+                            let form = this;
+                            swal({
+                                title: 'Are you sure?',
+                                text: "You won't be able to revert this!",
+                                icon: 'warning',
+                                buttons: true,
+                                dangerMode: true,
+                            }).then((isConfirm) => {
+                                if (isConfirm) {
+                                    form.submit();
+                                }
+                            });
+                        });
                 });
     </script>
 @endpush

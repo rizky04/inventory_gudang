@@ -19,7 +19,7 @@ class Product extends Model
         return $this->belongsTo(CategoryProduct::class, 'category_product_id');
     }
 
-    public function varianProduct(){
-        return $this->hasMany(VarianProduct::class, 'product_id');
+    public function variantProduct(){
+        return $this->hasMany(VariantProduct::class, 'product_id');
     }
 }
