@@ -34,6 +34,13 @@ class StockProductController extends Controller
                     });
         }
 
+        if ($rCategory) {
+            $query->whereHas('product', function ($query) use ($rCategory) {
+                $query->where('category_product_id', $rCategory);
+            });
+        }
+
+
 
 
         return view('stock-product.index', compact('pageTitle'));
