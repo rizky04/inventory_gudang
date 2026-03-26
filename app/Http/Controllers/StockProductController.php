@@ -28,7 +28,7 @@ class StockProductController extends Controller
 
         if ($search) {
             $query->where('name_variant', 'like', '%' . $search . '%')
-                    ->orWhere('sku', 'like', '%' . $search . '%')
+                    ->orWhere('number_sku', 'like', '%' . $search . '%')
                     ->orWhereHas('product', function ($query) use ($search) {
                         $query->where('name_product', 'like', '%' . $search . '%');
                     });
@@ -40,10 +40,23 @@ class StockProductController extends Controller
             });
         }
 
+        $paginator = $query->paginate($perPage)->appends(request()->query());
+        $product = $paginator->getCollection()->map(function ($q) {
+            return [
+                'variant_id' => $q->id,
+                'number_sku' => $q->number_sku,
+                'product' => $q->product->name_product . " " . $q->name_variant,
+                'category' => $q->product->category->name_category,
+                'stok_variant' => $q->stok_variant,
+                'price' => $q->price_variant,
+            ];
+        });
 
+        $paginator->setCollection($product);
 
+        $product = $paginator;
 
-        return view('stock-product.index', compact('pageTitle'));
+        return view('stock-product.index', compact('pageTitle', 'product', 'category'));
     }
 
     /**
