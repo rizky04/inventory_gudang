@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoryProduct;
+use App\Models\VariantProduct;
 use Illuminate\Http\Request;
 
 class StockProductController extends Controller
@@ -12,7 +14,28 @@ class StockProductController extends Controller
     public $pageTitle = 'Stock Product';
     public function index()
     {
+
         $pageTitle = $this->pageTitle;
+        $category = CategoryProduct::all();
+        $perPage = request()->query('perPage') ?? 10;
+        $search = request()->query('search');
+
+        $rCategory = request()->query('category');
+
+        $query = VariantProduct::query();
+
+        $query = $query->with('product', 'product.category');
+
+        if ($search) {
+            $query->where('name_variant', 'like', '%' . $search . '%')
+                    ->orWhere('sku', 'like', '%' . $search . '%')
+                    ->orWhereHas('product', function ($query) use ($search) {
+                        $query->where('name_product', 'like', '%' . $search . '%');
+                    });
+        }
+
+
+
         return view('stock-product.index', compact('pageTitle'));
     }
 
