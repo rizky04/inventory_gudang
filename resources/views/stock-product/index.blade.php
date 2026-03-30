@@ -40,7 +40,9 @@
                 <td>{{ $item['category'] }}</td>
                 <td>{{ number_format($item['stok_variant']) }}</td>
                 <td>{{ number_format($item['price']) }}</td>
-                <td></td>
+                <td>
+                    <x-card-stock number_sku="{{ $item['number_sku'] }}" />
+                </td>
             </tr>
               @empty
                 <td class="text-center" colspan="7">
