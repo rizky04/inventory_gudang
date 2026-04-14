@@ -42,7 +42,15 @@ class Sidebar extends Component
                         'route' => 'master-data.stock-product.index',
                     ],
                 ]
-            ]
+                ],
+                // TAMBAHKAN MENU CHATBOT DI SINI
+            [
+                'label' => 'AI Asisten Gudang',
+                'route' => 'chatbot.index', // Memanggil route name yang sudah dibuat sebelumnya
+                'is_active' => request()->routeIs('chatbot.*'), // Aktif jika URL ada di /chatbot
+                'icon' => 'fas fa-robot', // Menggunakan icon robot dari FontAwesome
+                'is_dropdown' => false,
+            ],
             ];
     }
 
