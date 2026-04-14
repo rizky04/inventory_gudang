@@ -19,7 +19,7 @@ return new class extends Migration
             $table->enum('transaction_type', ['in', 'out', 'adjustment', 'return']);
             $table->integer('amount_in');
             $table->integer('amount_out');
-            $table->interger('stock_after');
+            $table->integer('stock_after');
             $table->string('user');
             $table->timestamps();
         });
