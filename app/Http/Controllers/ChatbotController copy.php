@@ -3,25 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Ai\Agents\AssistantGudang;
-use App\Models\AgentConversation;
-use App\Models\AgentConversationMessage;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\VariantProduct;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class ChatbotController extends Controller
 {
     public function index()
     {
-        $conversation = $this->getOrCreateConversation();
-        $history = $conversation->messages()->get()->map(fn ($m) => [
-            'role'    => $m->role,
-            'content' => $m->content,
-        ])->toArray();
-
+        $history = Session::get('chat_history', []);
         return view('chatbot.index', compact('history'));
     }
 
@@ -32,22 +24,11 @@ class ChatbotController extends Controller
         $userMessage = $request->message;
 
         try {
-            $conversation = $this->getOrCreateConversation();
-
-            // Simpan pesan user ke DB
-            AgentConversationMessage::create([
-                'conversation_id' => $conversation->id,
-                'user_id'         => Auth::id(),
-                'agent'           => AssistantGudang::class,
-                'role'            => 'user',
-                'content'         => $userMessage,
-            ]);
-
             $context = $this->buildDatabaseContext();
             $promptWithContext = $context . "\n\n---\nPertanyaan user: " . $userMessage;
 
-            $response = (new AssistantGudang)->prompt($promptWithContext);
-            $aiReply  = (string) $response;
+            $response  = (new AssistantGudang)->prompt($promptWithContext);
+            $aiReply   = (string) $response;
 
             // Cek apakah AI merespons dengan perintah JSON
             $command = $this->extractJsonCommand($aiReply);
@@ -55,19 +36,10 @@ class ChatbotController extends Controller
                 $aiReply = $this->executeCommand($command);
             }
 
-            // Simpan balasan AI ke DB
-            AgentConversationMessage::create([
-                'conversation_id' => $conversation->id,
-                'user_id'         => Auth::id(),
-                'agent'           => AssistantGudang::class,
-                'role'            => 'assistant',
-                'content'         => $aiReply,
-            ]);
-
-            // Update judul conversation dari pesan pertama
-            if ($conversation->title === 'New Conversation') {
-                $conversation->update(['title' => mb_strimwidth($userMessage, 0, 60, '...')]);
-            }
+            $history   = Session::get('chat_history', []);
+            $history[] = ['role' => 'user',      'content' => $userMessage];
+            $history[] = ['role' => 'assistant', 'content' => $aiReply];
+            Session::put('chat_history', array_slice($history, -10));
 
             return response()->json(['reply' => $aiReply]);
 
@@ -78,48 +50,8 @@ class ChatbotController extends Controller
 
     public function clear()
     {
-        // Buat conversation baru (percakapan lama tetap tersimpan di DB)
-        Session::forget('conversation_id');
+        Session::forget('chat_history');
         return response()->json(['success' => true]);
-    }
-
-    // -------------------------------------------------------------------------
-    // Private: conversation management
-    // -------------------------------------------------------------------------
-
-    private function getOrCreateConversation(): AgentConversation
-    {
-        $conversationId = Session::get('conversation_id');
-
-        // Cek dari session dulu (lebih cepat)
-        if ($conversationId) {
-            $conversation = AgentConversation::find($conversationId);
-            if ($conversation) {
-                return $conversation;
-            }
-        }
-
-        // Jika user login, cari conversation terakhir miliknya dari DB
-        if (Auth::check()) {
-            $conversation = AgentConversation::where('user_id', Auth::id())
-                ->latest()
-                ->first();
-
-            if ($conversation) {
-                Session::put('conversation_id', $conversation->id);
-                return $conversation;
-            }
-        }
-
-        // Buat conversation baru
-        $conversation = AgentConversation::create([
-            'user_id' => Auth::id(),
-            'title'   => 'New Conversation',
-        ]);
-
-        Session::put('conversation_id', $conversation->id);
-
-        return $conversation;
     }
 
     // -------------------------------------------------------------------------

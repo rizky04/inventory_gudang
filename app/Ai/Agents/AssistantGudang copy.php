@@ -7,7 +7,6 @@ use Laravel\Ai\Contracts\Conversational;
 use Laravel\Ai\Messages\Message;
 use Laravel\Ai\Messages\MessageRole;
 use Laravel\Ai\Promptable;
-use App\Models\AgentConversation;
 use Illuminate\Support\Facades\Session;
 use Stringable;
 
@@ -52,28 +51,19 @@ PROMPT;
 
     public function messages(): iterable
     {
-        $conversationId = Session::get('conversation_id');
+        $history = Session::get('chat_history', []);
+        $history = array_slice($history, -6);
 
-        if (! $conversationId) {
-            return [];
+        $formattedMessages = [];
+
+        foreach ($history as $chat) {
+            if ($chat['role'] === 'user') {
+                $formattedMessages[] = new Message(MessageRole::User, $chat['content']);
+            } else {
+                $formattedMessages[] = new Message(MessageRole::Assistant, $chat['content']);
+            }
         }
 
-        $conversation = AgentConversation::find($conversationId);
-
-        if (! $conversation) {
-            return [];
-        }
-
-        // Ambil 6 pesan terakhir sebagai konteks (di luar pesan saat ini yang sedang diproses)
-        $dbMessages = $conversation->messages()
-            ->orderBy('created_at', 'desc')
-            ->limit(6)
-            ->get()
-            ->reverse();
-
-        return $dbMessages->map(fn ($m) => new Message(
-            $m->role === 'user' ? MessageRole::User : MessageRole::Assistant,
-            $m->content
-        ))->all();
+        return $formattedMessages;
     }
 }
